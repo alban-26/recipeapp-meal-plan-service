@@ -30,7 +30,7 @@ import java.net.URI;
 import java.util.EnumMap;
 import java.util.List;
 
-@Path("/mealplans")
+@Path("/mealPlans")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @NonBlocking
@@ -70,7 +70,7 @@ public class MealPlanResource implements MealPlansApi {
 
         log.info("Meal plan created successfully with id={} by user={}", saved.mealPlanId().id(), currentUserId.value());
 
-        URI location = URI.create("/mealplans/" + saved.mealPlanId().id());
+        URI location = URI.create("/mealPlans/" + saved.mealPlanId().id());
         return Response.created(location)
                 .entity(mealPlanConverter.domainToDto(saved))
                 .build();
