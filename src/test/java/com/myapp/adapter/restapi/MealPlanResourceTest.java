@@ -114,7 +114,7 @@ class MealPlanResourceTest {
                 .post("/mealPlans")
                 .then()
                 .statusCode(201)
-                .header("Location", org.hamcrest.Matchers.endsWith("/mealplans/1"))
+                .header("Location", org.hamcrest.Matchers.endsWith("/mealPlans/1"))
                 .body("id", equalTo(1))
                 .body("startDate", equalTo("2000-01-01"))
                 .body("endDate", equalTo("2000-01-02"));
