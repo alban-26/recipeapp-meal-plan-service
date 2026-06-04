@@ -27,7 +27,6 @@ import org.openapitools.model.MealPlanDto;
 import org.openapitools.model.RecipeDto;
 
 import java.net.URI;
-import java.util.EnumMap;
 import java.util.List;
 
 @Path("/mealPlans")
@@ -100,11 +99,6 @@ public class MealPlanResource implements MealPlansApi {
         log.debug("Fetching all recipes");
         UserId currentUserId = UserId.of(jwt.getSubject());
         List<RecipeInfo> recipeInfos = recipeInfoAccess.getAllByUser(currentUserId);
-
-        if (recipeInfos.isEmpty()) {
-            log.info("No recipes found for user {}", currentUserId);
-            return Response.noContent().build();
-        }
 
         log.info("Found {} recipes", recipeInfos.size());
         List<RecipeDto> dtos = recipeInfos.stream()
