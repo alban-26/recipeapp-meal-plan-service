@@ -7,11 +7,13 @@ import com.myapp.mealplan.domain.model.recipe.RecipeInfo;
 import io.vertx.core.eventbus.MessageConsumer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import java.util.Optional;
 
 @ApplicationScoped
+@Slf4j
 public class RecipeCreatedConsumer {
 
     private final MealPlanAccess mealPlanAccess;
@@ -29,7 +31,7 @@ public class RecipeCreatedConsumer {
 
     @Incoming("recipe-info")
     public void consume(RecipeCreatedEvent event) {
-        System.out.println("📩 Received RecipeCreatedEvent: " + event.getId() + " (" + event.getName() + ")");
+        log.info("Received RecipeCreatedEvent: {} ({})", event.getId(), event.getName());
 
         event.setId(
                 recipeInfoAccess

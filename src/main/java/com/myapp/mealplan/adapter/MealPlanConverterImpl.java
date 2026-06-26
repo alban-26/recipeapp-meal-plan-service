@@ -169,7 +169,7 @@ public class MealPlanConverterImpl implements MealPlanConverter {
     public MealPlanCreatedEvent domainToEvent(@NonNull MealPlan mealPlan, @NonNull RecipeInfoAccess recipeInfoAccess) {
         Collection<Meal> meals = getMeals(mealPlan);
         Collection<RecipeIngredient> recipeIngredients = recipeInfoAccess.getIngredientsByMeals(meals);
-        return new MealPlanCreatedEvent(recipeIngredients, mealPlan.userId());
+        return new MealPlanCreatedEvent(recipeIngredients, mealPlan.startDate(), mealPlan.endDate(), mealPlan.userId());
     }
 
 
