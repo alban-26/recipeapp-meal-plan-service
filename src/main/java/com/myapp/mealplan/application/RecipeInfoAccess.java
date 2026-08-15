@@ -3,6 +3,8 @@ package com.myapp.mealplan.application;
 
 import com.my.common.api.AbstractAccess;
 import com.my.common.api.UserId;
+import com.my.common.api.pagination.PageRequest;
+import com.my.common.api.pagination.PageResult;
 import com.myapp.mealplan.domain.model.Meal;
 import com.myapp.mealplan.domain.model.recipe.*;
 import com.myapp.mealplan.domain.service.RecipeInfoRepository;
@@ -86,4 +88,8 @@ public class RecipeInfoAccess extends AbstractAccess<RecipeInfoRepository, Recip
         return repository.findIdByName(recipeName, userId);
     }
 
+    @Override
+    public PageResult<RecipeInfo> getAllByUser(UserId userId, PageRequest pageRequest) {
+        return null;
+    }
 }

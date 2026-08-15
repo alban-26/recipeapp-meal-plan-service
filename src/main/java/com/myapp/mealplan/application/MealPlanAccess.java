@@ -1,6 +1,9 @@
 package com.myapp.mealplan.application;
 
 import com.my.common.api.AbstractAccess;
+import com.my.common.api.UserId;
+import com.my.common.api.pagination.PageRequest;
+import com.my.common.api.pagination.PageResult;
 import com.myapp.mealplan.adapter.MealPlanConverter;
 import com.myapp.mealplan.adapter.messaging.mealplan.MealPlanCreatedEvent;
 import com.myapp.mealplan.domain.model.DailyMealPlan;
@@ -42,6 +45,11 @@ public class MealPlanAccess extends AbstractAccess<MealPlanRepository, MealPlan,
         this.messagePublisher = messagePublisher;
         this.recipeInfoAccess = recipeInfoAccess;
         this.mealPlanConverter = mealPlanConverter;
+    }
+
+    @Override
+    public PageResult<MealPlan> getAllByUser(UserId userId, PageRequest pageRequest) {
+        return null;
     }
 
     public MealPlan save(MealPlan mealPlan) {
