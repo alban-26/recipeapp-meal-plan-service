@@ -75,6 +75,9 @@ public interface RecipeInfoMapper {
     @Select("SELECT id FROM recipe WHERE name = #{recipeName} and user_id = #{userId}")
     Long findRecipeIdByName(String recipeName, String userId);
 
+    @Select("SELECT EXISTS(SELECT 1 FROM recipe WHERE id = #{recipeId} AND user_id = #{userId})")
+    boolean existsByIdAndUserId(@Param("recipeId") Long recipeId, @Param("userId") String userId);
+
 
 
     // ================================

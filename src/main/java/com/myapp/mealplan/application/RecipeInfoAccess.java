@@ -88,6 +88,14 @@ public class RecipeInfoAccess extends AbstractAccess<RecipeInfoRepository, Recip
         return repository.findIdByName(recipeName, userId);
     }
 
+    /** true, wenn es das Rezept gibt und es diesem Nutzer gehoert. */
+    public boolean belongsToUser(RecipeId recipeId, UserId userId) {
+        if (recipeId == null || userId == null || userId.value() == null) {
+            return false;
+        }
+        return repository.existsByIdAndUserId(recipeId, userId);
+    }
+
     @Override
     public PageResult<RecipeInfo> getAllByUser(UserId userId, PageRequest pageRequest) {
         return null;

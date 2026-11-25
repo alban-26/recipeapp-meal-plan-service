@@ -12,4 +12,6 @@ public interface RecipeInfoRepository extends Repository<RecipeInfo, RecipeId> {
 
     Optional<Long> findIdByName(String recipeName, UserId userId);
 
+    boolean existsByIdAndUserId(RecipeId recipeId, UserId userId);
+
 }

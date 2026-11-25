@@ -32,6 +32,10 @@ public class MealPlanRepositoryImpl implements MealPlanRepository {
     @Override
     public Optional<MealPlan> findById(MealPlanId mealPlanId) {
         MealPlanEntity mealPlanEntity = mealPlanMapper.selectMealPlanById(mealPlanId.id());
+        if (mealPlanEntity == null) {
+            // Vorher: NullPointerException und damit 500 statt 404 bei unbekannter ID.
+            return Optional.empty();
+        }
         List<DailyMealPlanEntity> dailyMealPlanEntities = mealPlanMapper.selectDailyMealPlansWithMeals(mealPlanId.id());
         mealPlanEntity.setDailyMealPlans(dailyMealPlanEntities);
         return Optional.ofNullable(mealPlanConverter.entityToDomain(mealPlanEntity));

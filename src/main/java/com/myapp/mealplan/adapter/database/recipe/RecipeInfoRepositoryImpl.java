@@ -113,4 +113,9 @@ public class RecipeInfoRepositoryImpl implements RecipeInfoRepository {
     public Optional<Long> findIdByName(String recipeName, UserId userId) {
         return Optional.ofNullable(mapper.findRecipeIdByName(recipeName, userId.value()));
     }
+
+    @Override
+    public boolean existsByIdAndUserId(RecipeId recipeId, UserId userId) {
+        return mapper.existsByIdAndUserId(recipeId.id(), userId.value());
+    }
 }
