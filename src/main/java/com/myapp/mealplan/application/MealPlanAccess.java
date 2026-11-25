@@ -66,20 +66,30 @@ public class MealPlanAccess extends AbstractAccess<MealPlanRepository, MealPlan,
                         .map(Meal::recipe).map(recipe -> recipe.withUserId(mealPlan.userId()))
                         .toList();
 
-        List<RecipeInfo> recipeInfos = recipes.stream().map(this::saveRecipe).toList();
+        recipes.forEach(this::saveRecipe);
     }
 
-    private RecipeInfo saveRecipe(Recipe recipe) {
+    /**
+     * Legt ein frei eingetipptes Gericht (ID 0) an - aber nur, wenn der Nutzer
+     * noch keines mit diesem Namen hat. Sonst wird beim Speichern des Plans das
+     * vorhandene verwendet; vorher scheiterte der zweite Versuch am eindeutigen
+     * Namen (500), z. B. beim selben Gericht an zwei Tagen.
+     */
+    private void saveRecipe(Recipe recipe) {
         if (recipe.id() != null && recipe.id().id() != 0) {
-            return null;
+            return;
         }
-        return recipeInfoAccess.save(new RecipeInfo(recipe, 0, List.of()));
+        if (recipeInfoAccess.getIdByName(recipe.name(), recipe.userId()).isPresent()) {
+            return;
+        }
+        recipeInfoAccess.save(new RecipeInfo(recipe, 0, List.of()));
     }
 
 
     public MealPlan saveAndGenerateShoppingList(@NonNull MealPlan item) {
 
-        MealPlan savedMealPlan = super.save(item);
+        // save(...) statt super.save(...): legt vorher die frei eingetippten Gerichte an.
+        MealPlan savedMealPlan = save(item);
         log.debug("MealPlan saved with ID: {}", savedMealPlan.mealPlanId());
 
         MealPlanCreatedEvent mealPlanCreatedEvent = mealPlanConverter.domainToEvent(savedMealPlan, recipeInfoAccess);

@@ -26,6 +26,9 @@ public class RecipeInfoRepositoryImpl implements RecipeInfoRepository {
     @Override
     public Optional<RecipeInfo> findById(RecipeId recipeId) {
         RecipeInfoEntity entity = mapper.selectRecipeInfo(recipeId.id());
+        if (entity == null) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(recipeInfoConverter.entityToDomain(entity));
     }
 
@@ -117,5 +120,49 @@ public class RecipeInfoRepositoryImpl implements RecipeInfoRepository {
     @Override
     public boolean existsByIdAndUserId(RecipeId recipeId, UserId userId) {
         return mapper.existsByIdAndUserId(recipeId.id(), userId.value());
+    }
+
+    @Override
+    public Optional<Long> findIdBySourceId(long sourceRecipeId, UserId userId) {
+        return Optional.ofNullable(mapper.findRecipeIdBySourceId(sourceRecipeId, userId.value()));
+    }
+
+    @Override
+    public Optional<Long> findUnlinkedIdByName(String recipeName, UserId userId) {
+        return Optional.ofNullable(mapper.findUnlinkedRecipeIdByName(recipeName, userId.value()));
+    }
+
+    @Override
+    public Optional<Long> findSourceId(RecipeId recipeId) {
+        return Optional.ofNullable(mapper.findSourceRecipeId(recipeId.id()));
+    }
+
+    @Override
+    public void linkToSource(RecipeId recipeId, long sourceRecipeId) {
+        mapper.updateSourceRecipeId(recipeId.id(), sourceRecipeId);
+    }
+
+    @Override
+    public void mergeInto(RecipeId from, RecipeId into) {
+        mapper.addServingsOfDuplicateMeals(from.id(), into.id());
+        mapper.deleteDuplicateMeals(from.id(), into.id());
+        mapper.moveMeals(from.id(), into.id());
+        // Erst jetzt loeschen: daily_meals haengt mit ON DELETE CASCADE am Rezept.
+        mapper.deleteRecipe(from.id());
+    }
+
+    @Override
+    public void hide(RecipeId recipeId) {
+        mapper.hideRecipe(recipeId.id());
+    }
+
+    @Override
+    public void markDeleted(RecipeId recipeId) {
+        mapper.markRecipeDeleted(recipeId.id());
+    }
+
+    @Override
+    public boolean isUsedInMealPlans(RecipeId recipeId) {
+        return mapper.isRecipeUsedInMealPlans(recipeId.id());
     }
 }

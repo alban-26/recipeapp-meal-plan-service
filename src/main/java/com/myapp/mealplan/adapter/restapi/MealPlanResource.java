@@ -36,6 +36,7 @@ import java.util.List;
 @Path("/mealPlans")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@NonBlocking
 @Slf4j
 @ApplicationScoped
 public class MealPlanResource implements MealPlansApi {
